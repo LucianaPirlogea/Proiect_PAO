@@ -1,2 +1,2 @@
-# Proiect_PAO
-Banking Application
+# Banking Application
+
