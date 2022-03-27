@@ -12,17 +12,15 @@ public class Card {
     static private final Set<String> nonAvailableNumbers = new HashSet<>();
     static private final Set<Integer> nonAvailableCVVs = new HashSet<>();
 
-    public Card(int Id, String name) {
-        this.Id = Id;
+    public Card(String name) {
+        this.Id = indexId++;
         this.name = name;
         this.number = this.generateCardNumber();
 
-        /* Generate Card Number */
         while(nonAvailableNumbers.contains(this.number))
             this.number = this.generateCardNumber();
         nonAvailableNumbers.add(this.number);
 
-        /* Generate CVV */
         int temporary_CVV = this.generateCardCVV();
         while(nonAvailableCVVs.contains(temporary_CVV))
             temporary_CVV = this.generateCardCVV();
@@ -30,7 +28,6 @@ public class Card {
         this.CVV = temporary_CVV;
 
 
-        /* Generate expiration date */
         Calendar c = Calendar.getInstance();
         c.setTime(new Date());
         c.add(Calendar.YEAR, 5);
@@ -51,20 +48,16 @@ public class Card {
         return 100 + rand.nextInt(899);
     }
 
-    public Card addSimpleCard(String name){
-        return new Card(indexId++, name);
-    }
-
-    public void setName(String name){
-        this.name = name;
-    }
-
     public int getCardId() {
         return this.Id;
     }
 
     public String getNumber() {
         return this.number;
+    }
+
+    public void setName(String name){
+        this.name = name;
     }
 
     public String getName() {
