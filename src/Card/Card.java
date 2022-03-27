@@ -2,6 +2,7 @@ package Card;
 import java.util.*;
 
 public class Card {
+    protected static int indexId = 0;
     private final int Id;
     private final int CVV;
     private final Date expirationDate;
@@ -10,10 +11,9 @@ public class Card {
 
     static private final Set<String> nonAvailableNumbers = new HashSet<>();
     static private final Set<Integer> nonAvailableCVVs = new HashSet<>();
-    static private final Set<Integer> nonAvailableIds = new HashSet<>();
 
-    public Card(String name) {
-
+    public Card(int Id, String name) {
+        this.Id = Id;
         this.name = name;
         this.number = this.generateCardNumber();
 
@@ -29,11 +29,6 @@ public class Card {
         nonAvailableCVVs.add(temporary_CVV);
         this.CVV = temporary_CVV;
 
-        int temporary_id = this.generateCardId();
-        while(nonAvailableIds.contains(temporary_id))
-            temporary_id = this.generateCardId();
-        nonAvailableIds.add(temporary_id);
-        this.Id = temporary_id;
 
         /* Generate expiration date */
         Calendar c = Calendar.getInstance();
@@ -56,9 +51,8 @@ public class Card {
         return 100 + rand.nextInt(899);
     }
 
-    private int generateCardId(){
-        var rand = new Random();
-        return rand.nextInt(9999);
+    public Card addSimpleCard(String name){
+        return new Card(indexId++, name);
     }
 
     public void setName(String name){
