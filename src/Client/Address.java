@@ -22,6 +22,8 @@ public class Address {
     public void read(Scanner in){
         System.out.println("Street: ");
         this.street = in.nextLine();
+        System.out.println("Number: ");
+        this.number = Integer.parseInt(in.nextLine());
         System.out.println("City: ");
         this.city = in.nextLine();
         System.out.println("County: ");

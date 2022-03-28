@@ -4,6 +4,7 @@ import Card.*;
 import Client.Client;
 import Transaction.Transaction;
 
+import java.text.ParseException;
 import java.util.*;
 
 public class Account {
@@ -53,10 +54,10 @@ public class Account {
         cards.add(newCard);
     }
 
-    //public void addAuthorizedPerson(String name){
-    //    Card newCard = cardFactory.addCard(this.IBAN, name);
-    //    cards.add(newCard);
-    //}
+    public void addAuthorizedPerson(Scanner in) throws ParseException {
+        Client newAuthorized = new Client(in);
+        authorizedPeople.add(newAuthorized);
+    }
 
     public void addTransaction(String type, String fromAccount, String beneficiary, double amount, String details){
         Transaction newTransaction = new Transaction(type, fromAccount, beneficiary, amount, details);
