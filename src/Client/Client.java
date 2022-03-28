@@ -1,6 +1,6 @@
 package Client;
 
-import Account.Account;
+import Account.*;
 import Transaction.Transaction;
 
 import java.text.*;
@@ -15,7 +15,7 @@ public class Client {
     private String email, phone;
     private Address address;
 
-    static private final Set<Account> accounts = new HashSet<>();
+    private final Set<Account> accounts = new HashSet<>();
 
     public Client(String firstName, String lastName, String CNP, Date birthDate, String email, String phone, Address address) {
         this.clientId = indexId++;
@@ -50,9 +50,23 @@ public class Client {
         this.address = new Address(in);
     }
 
-    public void addAccount(String name){
+    public String addAccount(String name){
         Account newAccount = new Account(name);
         accounts.add(newAccount);
+        return newAccount.getIBAN();
+    }
+
+
+    public String addSavingsAccount(String name){
+        Account newSavingsAccount = new SavingsAccount(name);
+        accounts.add(newSavingsAccount);
+        return newSavingsAccount.getIBAN();
+    }
+
+    public String addDeposit(String name){
+        Account newDeposit = new Deposit(name);
+        accounts.add(newDeposit);
+        return newDeposit.getIBAN();
     }
 
     public String getFirstName() {
@@ -109,5 +123,11 @@ public class Client {
 
     public void setAddress(Address address) {
         this.address = address;
+    }
+
+    public int getClientId(){ return clientId;}
+
+    public Set<Account> getAccounts() {
+        return accounts;
     }
 }

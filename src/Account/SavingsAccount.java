@@ -4,7 +4,7 @@ import java.util.*;
 
 public class SavingsAccount extends Account{
     private final Date startDate;
-    private Date endDate;
+    private final Date endDate;
 
     public SavingsAccount(String name) {
         super(name);
@@ -26,10 +26,6 @@ public class SavingsAccount extends Account{
 
     public Date getStartDate() {
         return startDate;
-    }
-
-    public void setEndDate(Date endDate) {
-        this.endDate = endDate;
     }
 
     public Date getEndDate() {

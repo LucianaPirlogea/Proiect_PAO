@@ -44,13 +44,15 @@ public class Account {
         cards.add(newCard);
     }
 
-    public void addVisaCard(String name, boolean emergencyCardReplacement, int travelAccidentInsurance){
-        Card newCard = new Visa(name, emergencyCardReplacement, travelAccidentInsurance);
+    public void addVisaCard(String name) throws ParseException {
+        Scanner in = new Scanner(System.in);
+        Card newCard = new Visa(name, in);
         cards.add(newCard);
     }
 
-    public void addMasterCard(String name, String tier, int cellPhoneProtection){
-        Card newCard = new MasterCard(name, tier, cellPhoneProtection);
+    public void addMasterCard(String name) throws ParseException{
+        Scanner in = new Scanner(System.in);
+        Card newCard = new MasterCard(name,in);
         cards.add(newCard);
     }
 
@@ -59,8 +61,8 @@ public class Account {
         authorizedPeople.add(newAuthorized);
     }
 
-    public void addTransaction(String type, String fromAccount, String beneficiary, double amount, String details){
-        Transaction newTransaction = new Transaction(type, fromAccount, beneficiary, amount, details);
+    public void addTransaction(Scanner in, String fromAccount, double amount) throws ParseException {
+        Transaction newTransaction = new Transaction(in, fromAccount, amount);
         transactions.add(newTransaction);
     }
 

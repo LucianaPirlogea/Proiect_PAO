@@ -19,7 +19,4 @@ public class Deposit extends SavingsAccount{
         return interestRate;
     }
 
-    public void setInterestRate(double interestRate) {
-        this.interestRate = interestRate;
-    }
 }

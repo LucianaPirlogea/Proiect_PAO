@@ -26,7 +26,7 @@ public class Address {
         this.number = Integer.parseInt(in.nextLine());
         System.out.println("City: ");
         this.city = in.nextLine();
-        System.out.println("County: ");
+        System.out.println("Country: ");
         this.country = in.nextLine();
         System.out.println("Postal code: ");
         this.postalCode = Integer.parseInt(in.nextLine());
