@@ -32,6 +32,16 @@ public class Address {
         this.postalCode = Integer.parseInt(in.nextLine());
     }
 
+    public void out(){
+        System.out.println("Address Details:");
+        System.out.println("Street: " + this.street);
+        System.out.println("Number: " + this.number);
+        System.out.println("City: " + this.city);
+        System.out.println("Country: " + this.country);
+        System.out.println("Postal code: " + this.postalCode);
+        System.out.println("\n");
+    }
+
     public String getStreet() {
         return street;
     }

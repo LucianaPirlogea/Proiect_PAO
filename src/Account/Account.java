@@ -31,29 +31,33 @@ public class Account {
         this.name = name;
     }
 
-    public List<Transaction> filterTransactionsByYear(int year){
-        List<Transaction> transactionsYear = new ArrayList<>();
-        for(var transaction: transactions)
-            if(transaction.getFromAccount().equals(this.IBAN) && transaction.getCreationDate().getYear()==year)
-                transactionsYear.add(transaction);
-        return transactionsYear;
+    public void out(){
+        System.out.println("Account Details:");
+        System.out.println("Name: " + this.name);
+        System.out.println("IBAN: " + this.IBAN);
+        System.out.println("SWIFT: " + this.swift);
+        System.out.println("Amount: " + this.amount);
+        System.out.println("\n");
     }
 
-    public void addSimpleCard(String name){
+    public int addSimpleCard(String name){
         Card newCard = new Card(name);
         cards.add(newCard);
+        return newCard.getCardId();
     }
 
-    public void addVisaCard(String name) throws ParseException {
+    public int addVisaCard(String name) throws ParseException {
         Scanner in = new Scanner(System.in);
         Card newCard = new Visa(name, in);
         cards.add(newCard);
+        return newCard.getCardId();
     }
 
-    public void addMasterCard(String name) throws ParseException{
+    public int addMasterCard(String name) throws ParseException{
         Scanner in = new Scanner(System.in);
         Card newCard = new MasterCard(name,in);
         cards.add(newCard);
+        return newCard.getCardId();
     }
 
     public void addAuthorizedPerson(Scanner in) throws ParseException {
@@ -65,6 +69,7 @@ public class Account {
         Transaction newTransaction = new Transaction(in, fromAccount, amount);
         transactions.add(newTransaction);
     }
+
 
     private String generateIBAN(){
         String generatedIBAN = "RO";

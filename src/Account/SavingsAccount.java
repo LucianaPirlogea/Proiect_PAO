@@ -3,8 +3,8 @@ package Account;
 import java.util.*;
 
 public class SavingsAccount extends Account{
-    private final Date startDate;
-    private final Date endDate;
+    protected final Date startDate;
+    protected final Date endDate;
 
     public SavingsAccount(String name) {
         super(name);
@@ -22,6 +22,17 @@ public class SavingsAccount extends Account{
 
         this.startDate = startDate;
         this.endDate = endDate;
+    }
+
+    public void out(){
+        System.out.println("Savings Account Details:");
+        System.out.println("Name: " + this.name);
+        System.out.println("IBAN: " + this.IBAN);
+        System.out.println("SWIFT: " + this.swift);
+        System.out.println("Amount: " + this.amount);
+        System.out.println("Start date: " + this.startDate);
+        System.out.println("End date:" + this.endDate);
+        System.out.println("\n");
     }
 
     public Date getStartDate() {

@@ -3,11 +3,11 @@ import java.util.*;
 
 public class Card {
     protected static int indexId = 0;
-    private final int Id;
-    private final int CVV;
-    private final Date expirationDate;
-    private String number;
-    private String name;
+    protected final int Id;
+    protected final int CVV;
+    protected final Date expirationDate;
+    protected String number;
+    protected String name;
 
     static private final Set<String> nonAvailableNumbers = new HashSet<>();
     static private final Set<Integer> nonAvailableCVVs = new HashSet<>();
@@ -32,6 +32,16 @@ public class Card {
         c.setTime(new Date());
         c.add(Calendar.YEAR, 5);
         this.expirationDate = c.getTime();
+    }
+
+    public void out(){
+        System.out.println("Card Details:");
+        System.out.println("Id: " + this.Id);
+        System.out.println("Name: " + this.name);
+        System.out.println("Number: " + this.number);
+        System.out.println("CVV: " + this.CVV);
+        System.out.println("Expiration Date: " + this.expirationDate);
+        System.out.println("\n");
     }
 
     private String generateCardNumber(){

@@ -25,6 +25,18 @@ public class MasterCard extends Card{
         this.cellPhoneProtection = Integer.parseInt(in.nextLine());
     }
 
+    public void out(){
+        System.out.println("MasterCard Details:");
+        System.out.println("Id: " + this.Id);
+        System.out.println("Name: " + this.name);
+        System.out.println("Number: " + this.number);
+        System.out.println("CVV: " + this.CVV);
+        System.out.println("Expiration Date: " + this.expirationDate);
+        System.out.println("Tier: " + this.tier);
+        System.out.println("Cell Phone Protection: " + this.cellPhoneProtection);
+        System.out.println("\n");
+    }
+
     public void setTier(String tier){
         this.tier = tier;
     }

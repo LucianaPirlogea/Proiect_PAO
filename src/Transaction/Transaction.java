@@ -30,10 +30,21 @@ public class Transaction {
     public void read(Scanner in) throws ParseException {
         System.out.println("Type(intrabanking/interbanking): ");
         this.type = in.nextLine();
-        System.out.println("Beneficiary Account: ");
+        System.out.println("Beneficiary Account(IBAN): ");
         this.beneficiary = in.nextLine();
         System.out.println("Details: ");
         this.details = in.nextLine();
+    }
+
+    public void out(){
+        System.out.println("Transaction Details:");
+        System.out.println("Type(intrabanking/interbanking): " + this.type);
+        System.out.println("From Account: " + this.fromAccount);
+        System.out.println("Beneficiary Account(IBAN): " + this.beneficiary);
+        System.out.println("Amount: " + this.amount);
+        System.out.println("Details: " + this.details);
+        System.out.println("Creation Date: " + this.creationDate);
+        System.out.println("\n");
     }
 
     public String getType(){

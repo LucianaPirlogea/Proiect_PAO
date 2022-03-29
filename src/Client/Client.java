@@ -50,10 +50,26 @@ public class Client {
         this.address = new Address(in);
     }
 
+    public void out(){
+        System.out.println("Client Details:");
+        System.out.println("Id: " + this.clientId);
+        System.out.println("First Name: " + this.firstName);
+        System.out.println("Last name: " + this.lastName);
+        System.out.println("CNP: " + this.CNP);
+        System.out.println("Birthdate: " + this.birthDate);
+        System.out.println("Email: " + this.email);
+        System.out.println("Phone: " + this.phone);
+        this.address.out();
+    }
+
     public String addAccount(String name){
         Account newAccount = new Account(name);
         accounts.add(newAccount);
         return newAccount.getIBAN();
+    }
+
+    public void closeAccount(Account deleteAccount){
+        accounts.remove(deleteAccount);
     }
 
 
