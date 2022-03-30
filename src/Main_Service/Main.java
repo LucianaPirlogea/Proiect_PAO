@@ -13,6 +13,7 @@ public class Main {
         while(!end){
             int idClient;
             String IBAN;
+            System.out.println("\n");
             System.out.println("1  - Creare client");
             System.out.println("2  - Creare cont pentru client");
             System.out.println("3  - Adaugare card la cont");
@@ -22,7 +23,7 @@ public class Main {
             System.out.println("7  - Afisare date client");
             System.out.println("8  - Afisare date card");
             System.out.println("9  - Afisare date cont client");
-            System.out.println("10 - Listare tranzactii cont");
+            System.out.println("10 - Listare tranzactii cont ordonata dupa suma");
             System.out.println("11 - Afisare extras de cont client");
             System.out.println("12 - Inchidere cont client");
             System.out.println("13 - Inchideti aplicatia");
@@ -118,7 +119,7 @@ public class Main {
             }catch (Exception e){
                 System.out.println(e.toString());
             }
-            //System.out.println("\\033[H\\033[2J");
+
         }
     }
 }

@@ -3,7 +3,6 @@ package Card;
 import Client.Address;
 
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.Scanner;
 
 public class Visa extends Card{

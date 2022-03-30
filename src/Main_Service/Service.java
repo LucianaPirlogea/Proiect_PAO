@@ -14,9 +14,20 @@ public class Service {
     public void createClient(Scanner in) throws ParseException {
         System.out.println("Introduceti datele:");
         Client newClient = new Client(in);
-        clients.add(newClient);
-        System.out.println("Clientul a fost adaugat cu succes!");
-        System.out.println("Id Client: " + newClient.getClientId());
+        int existingClient = 0;
+        for(int i=0; i<clients.size();i++) {
+            if (clients.get(i).getCNP().equals(newClient.getCNP())) {
+                existingClient = 1;
+            }
+        }
+        if(existingClient == 1){
+            System.out.println("Clientul deja exista!");
+        }
+        else{
+            clients.add(newClient);
+            System.out.println("Clientul a fost adaugat cu succes!");
+            System.out.println("Id Client: " + newClient.getClientId());
+        }
     }
 
     public void createAccountForClient(int idClient){
@@ -31,17 +42,17 @@ public class Service {
             if(clients.get(i).getClientId() == idClient){
                 foundClient = 1;
                 if (optiune == 1){
-                    System.out.println("Contul a fost adaugat cu succes!");
+                    System.out.println("Contul curent a fost adaugat cu succes!");
                     String IBAN = clients.get(i).addAccount(clients.get(i).getLastName() + " " + clients.get(i).getFirstName());
                     System.out.println("IBAN: " + IBAN);
                 }
                 if (optiune == 2){
-                    System.out.println("Contul a fost adaugat cu succes!");
+                    System.out.println("Contul de economii a fost adaugat cu succes!");
                     String IBAN = clients.get(i).addSavingsAccount(clients.get(i).getLastName() + " " +clients.get(i).getFirstName());
                     System.out.println("IBAN: " + IBAN);
                 }
                 if (optiune == 3){
-                    System.out.println("Contul a fost adaugat cu succes!");
+                    System.out.println("Depozitul a fost adaugat cu succes!");
                     String IBAN = clients.get(i).addDeposit(clients.get(i).getLastName() + " " +clients.get(i).getFirstName());
                     System.out.println("IBAN: " + IBAN);
                 }
@@ -69,18 +80,18 @@ public class Service {
                     if(account.getIBAN().equals(IBAN) && account.getClass() == Account.class){ // se poate adauga un card doar la contul curent
                         foundAccount = 1;
                         if (optiune == 1){
-                            System.out.println("Cardul a fost adaugat cu succes!");
                             int idCard = account.addSimpleCard(clients.get(i).getLastName() + " " +clients.get(i).getFirstName());
+                            System.out.println("Cardul a fost adaugat cu succes!");
                             System.out.println("Id card: " + idCard);
                         }
                         if (optiune == 2){
-                            System.out.println("Cardul a fost adaugat cu succes!");
                             int idCard =account.addMasterCard(clients.get(i).getLastName() + " " +clients.get(i).getFirstName());
+                            System.out.println("Cardul MasterCard a fost adaugat cu succes!");
                             System.out.println("Id card: " + idCard);
                         }
                         if (optiune == 3){
-                            System.out.println("Cardul a fost adaugat cu succes!");
                             int idCard = account.addVisaCard(clients.get(i).getLastName() + " " +clients.get(i).getFirstName());
+                            System.out.println("Cardul Visa a fost adaugat cu succes!");
                             System.out.println("Id card: " + idCard);
                         }
                         break;
@@ -127,12 +138,14 @@ public class Service {
     }
 
     public void addAuthorizedPersontoAccount(int idClientPrincipal, String IBAN) throws ParseException {
+        int foundAccount = 0;
         for(int i=0; i<clients.size();i++){
             if(clients.get(i).getClientId() == idClientPrincipal){
                 Iterator<Account> it = clients.get(i).getAccounts().iterator();
                 while(it.hasNext()) {
                     Account account = it.next();
                     if(account.getIBAN().equals(IBAN)){
+                        foundAccount = 1;
                         Scanner in = new Scanner(System.in);
                         account.addAuthorizedPerson(in);
                         System.out.println("Persoana imputernicita a fost adaugata cu succes!");
@@ -143,16 +156,21 @@ public class Service {
 
             }
         }
+        if(foundAccount==0){
+            System.out.println("Persoana imputernicita nu a fost adaugata! Cont inexistent!");
+        }
 
     }
 
     public void loadAccount(int idClient, String IBAN, double amount){
+        int foundAccount = 0;
         for(int i=0; i<clients.size();i++){
             if(clients.get(i).getClientId() == idClient){
                 Iterator<Account> it = clients.get(i).getAccounts().iterator();
                 while(it.hasNext()) {
                     Account account = it.next();
                     if(account.getIBAN().equals(IBAN)){
+                        foundAccount = 1;
                         account.setAmount(account.getAmount() + amount);
                         System.out.println("Contul a fost incarcat cu succes!");
                         break;
@@ -160,6 +178,9 @@ public class Service {
                 }
                 break;
             }
+        }
+        if(foundAccount == 0){
+            System.out.println("Cont inexistent!");
         }
     }
 
@@ -182,15 +203,17 @@ public class Service {
         }
 
         if(foundAccount == 0){
-            System.out.println("Contul nu a fost gasit!");
+            System.out.println("Contul inexistent!");
         }
 
     }
 
     public void getCustomerAmount(int idClient){
+        int foundClient = 0;
         for(int i=0; i<clients.size();i++){
             if(clients.get(i).getClientId() == idClient){
                 Iterator<Account> it = clients.get(i).getAccounts().iterator();
+                foundClient = 1;
                 while(it.hasNext()) {
                     Account account = it.next();
                     if(account.getClass() == Account.class){
@@ -205,6 +228,9 @@ public class Service {
                 }
                 break;
             }
+        }
+        if(foundClient == 0){
+            System.out.println("Client inexistent!");
         }
     }
 
