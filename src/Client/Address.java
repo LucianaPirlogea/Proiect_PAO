@@ -42,6 +42,14 @@ public class Address {
         System.out.println("\n");
     }
 
+    public String toCSV() {
+        return street +
+                "," + number +
+                "," + city +
+                "," + country+
+                "," + postalCode;
+    }
+
     public String getStreet() {
         return street;
     }

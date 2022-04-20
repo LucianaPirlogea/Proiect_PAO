@@ -99,6 +99,13 @@ public class Account {
         return generatedSwift;
     }
 
+    public String toCSV() {
+        return IBAN +
+                "," + swift +
+                "," + amount +
+                "," + name;
+    }
+
     public String getIBAN() {
         return IBAN;
     }

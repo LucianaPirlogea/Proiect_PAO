@@ -1,6 +1,7 @@
 package Transaction;
 
 import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.*;
 
 public class Transaction {
@@ -11,13 +12,13 @@ public class Transaction {
     private String details;
     private Date creationDate;
 
-    public Transaction(String type, String fromAccount, String beneficiary, double amount, String details) {
+    public Transaction(String type, String fromAccount, String beneficiary, double amount, String details, Date creationDate) {
         this.type = type;
         this.fromAccount = fromAccount;
         this.beneficiary = beneficiary;
         this.amount = amount;
         this.details = details;
-        this.creationDate = new Date();
+        this.creationDate = creationDate;
     }
 
     public Transaction(Scanner in, String fromAccount, double amount) throws ParseException {
@@ -45,6 +46,15 @@ public class Transaction {
         System.out.println("Details: " + this.details);
         System.out.println("Creation Date: " + this.creationDate);
         System.out.println("\n");
+    }
+
+    public String toCSV() {
+        return type +
+                "," + fromAccount +
+                "," + beneficiary +
+                "," + amount +
+                "," + details +
+                "," + (new SimpleDateFormat("yyyy-MM-dd h:m:s")).format(creationDate);
     }
 
     public String getType(){

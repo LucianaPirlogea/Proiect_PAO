@@ -1,7 +1,6 @@
 package Client;
 
 import Account.*;
-import Transaction.Transaction;
 
 import java.text.*;
 import java.util.*;
@@ -83,6 +82,17 @@ public class Client {
         Account newDeposit = new Deposit(name);
         accounts.add(newDeposit);
         return newDeposit.getIBAN();
+    }
+
+    public String toCSV(){
+        return clientId +
+                "," + firstName +
+                "," + lastName +
+                "," + CNP +
+                "," + (new SimpleDateFormat("yyyy-MM-dd")).format(birthDate) +
+                "," + email +
+                "," + phone +
+                "," + address.toCSV();
     }
 
     public String getFirstName() {

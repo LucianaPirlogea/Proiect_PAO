@@ -1,5 +1,6 @@
 package Account;
 
+import java.text.SimpleDateFormat;
 import java.util.*;
 
 public class SavingsAccount extends Account{
@@ -33,6 +34,15 @@ public class SavingsAccount extends Account{
         System.out.println("Start date: " + this.startDate);
         System.out.println("End date:" + this.endDate);
         System.out.println("\n");
+    }
+
+    public String toCSV() {
+        return IBAN +
+                "," + swift +
+                "," + amount +
+                "," + name +
+                "," + (new SimpleDateFormat("yyyy-MM-dd")).format(startDate) +
+                "," + (new SimpleDateFormat("yyyy-MM-dd")).format(endDate);
     }
 
     public Date getStartDate() {
