@@ -6,9 +6,13 @@ import java.util.*;
 
 public class Main {
 
+    static List<Integer> availableCommands = Arrays.asList(1,2,3,4,5,6,7,8,9,10,11,12,13);
+
     public static void main(String[] args) throws ParseException {
+
         Scanner in = new Scanner(System.in);
         Service service = new Service();
+        AuditService auditService = new AuditService();
         boolean end = false;
         while(!end){
             int idClient;
@@ -116,6 +120,8 @@ public class Main {
                         end = true;
                         break;
                 }
+                if(availableCommands.contains(command))
+                    auditService.logAction(Integer.toString(command));
             }catch (Exception e){
                 System.out.println(e.toString());
             }
