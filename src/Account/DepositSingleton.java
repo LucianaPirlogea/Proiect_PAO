@@ -52,7 +52,7 @@ public class DepositSingleton {
 
     public void loadFromCSV() {
         try{
-            var columns = DepositSingleton.getCSVColumns("data/Deposits.csv");
+            var columns = DepositSingleton.getCSVColumns("data/deposits.csv");
             for(var fields : columns) {
                 var newDeposit = new Deposit(
                         fields[0],
@@ -74,7 +74,7 @@ public class DepositSingleton {
 
     public void dumpToCSV(){
         try{
-            var writer = new FileWriter("data/Deposits.csv");
+            var writer = new FileWriter("data/deposits.csv");
             for(var deposit : this.deposits){
                 writer.write(deposit.toCSV());
                 writer.write("\n");

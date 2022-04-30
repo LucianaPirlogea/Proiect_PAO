@@ -1,18 +1,34 @@
 package Main_Service;
-import Card.*;
+import Account.*;
+import Client.ClientSingleton;
+import Transaction.TransactionSingleton;
 
 import java.text.ParseException;
 import java.util.*;
 
 public class Main {
 
-    static List<Integer> availableCommands = Arrays.asList(1,2,3,4,5,6,7,8,9,10,11,12,13);
+    static List<Integer> availableCommands = Arrays.asList(1,2,3,4,5,6,7,8,9,10,11,12);
 
     public static void main(String[] args) throws ParseException {
 
         Scanner in = new Scanner(System.in);
         Service service = new Service();
         AuditService auditService = new AuditService();
+
+        ClientSingleton.getInstance().loadFromCSV();
+        AccountSingleton.getInstance().loadFromCSV();
+        SavingsAccountSingleton.getInstance().loadFromCSV();
+        DepositSingleton.getInstance().loadFromCSV();
+        TransactionSingleton.getInstance().loadFromCSV();
+
+
+        service.setClients(ClientSingleton.getInstance().getCustomers());
+        service.setAccounts(AccountSingleton.getInstance().getAccounts());
+        service.setSavingsAccounts(SavingsAccountSingleton.getInstance().getSavingsAccounts());
+        service.setDeposits(DepositSingleton.getInstance().getDeposits());
+        service.setTransactions(TransactionSingleton.getInstance().getTransactions());
+
         boolean end = false;
         while(!end){
             int idClient;
@@ -34,17 +50,21 @@ public class Main {
             System.out.println("\n");
             System.out.println("Introduceti comanda: ");
             int command = Integer.parseInt(in.nextLine());
+            String commandName = "";
             try{
                 switch (command) {
                     case 1:
+                        commandName = "Creare client";
                         service.createClient(in);
                         break;
                     case 2:
+                        commandName = "Creare cont pentru client";
                         System.out.println("Introduceti id-ul clientului: ");
                         idClient = Integer.parseInt(in.nextLine());
                         service.createAccountForClient(idClient);
                         break;
                     case 3:
+                        commandName = "Adaugare card la cont";
                         System.out.println("Introduceti id-ul clientului: ");
                         idClient= Integer.parseInt(in.nextLine());
                         System.out.println("Introduceti IBAN-ul contului: ");
@@ -52,6 +72,7 @@ public class Main {
                         service.addCardtoAccount(idClient, IBAN);
                         break;
                     case 4:
+                        commandName = "Adaugare tranzactie la cont";
                         System.out.println("Introduceti id-ul clientului: ");
                         idClient = Integer.parseInt(in.nextLine());
                         System.out.println("Introduceti IBAN-ul contului sursa: ");
@@ -61,6 +82,7 @@ public class Main {
                         service.addTransactiontoAccount(idClient,IBAN,amount_transfer);
                         break;
                     case 5:
+                        commandName = "Adaugare persoana imputernicita la cont";
                         System.out.println("Introduceti id-ul clientului titular: ");
                         idClient = Integer.parseInt(in.nextLine());
                         System.out.println("Introduceti IBAN-ul contului: ");
@@ -68,6 +90,7 @@ public class Main {
                         service.addAuthorizedPersontoAccount(idClient, IBAN);
                         break;
                     case 6:
+                        commandName = "Incarcare cont client";
                         System.out.println("Introduceti id-ul clientului: ");
                         idClient = Integer.parseInt(in.nextLine());
                         System.out.println("Introduceti IBAN-ul contului: ");
@@ -77,11 +100,13 @@ public class Main {
                         service.loadAccount(idClient,IBAN,amount_load);
                         break;
                     case 7:
+                        commandName = "Afisare date client";
                         System.out.println("Introduceti id-ul clientului: ");
                         idClient = Integer.parseInt(in.nextLine());
                         service.getClientDetails(idClient);
                         break;
                     case 8:
+                        commandName = "Afisare date card";
                         System.out.println("Introduceti id-ul clientului: ");
                         idClient = Integer.parseInt(in.nextLine());
                         System.out.println("Introduceti IBAN-ul contului: ");
@@ -91,6 +116,7 @@ public class Main {
                         service.getCardDetails(idClient, IBAN, idCard);
                         break;
                     case 9:
+                        commandName = "Afisare date cont client";
                         System.out.println("Introduceti id-ul clientului: ");
                         idClient = Integer.parseInt(in.nextLine());
                         System.out.println("Introduceti IBAN-ul contului: ");
@@ -98,6 +124,7 @@ public class Main {
                         service.getAccountDetails(idClient,IBAN);
                         break;
                     case 10:
+                        commandName = "Listare tranzactii cont ordonata dupa suma";
                         System.out.println("Introduceti id-ul clientului: ");
                         idClient = Integer.parseInt(in.nextLine());
                         System.out.println("Introduceti IBAN-ul contului: ");
@@ -105,11 +132,13 @@ public class Main {
                         service.getTransactionsPerAccount(idClient,IBAN);
                         break;
                     case 11:
+                        commandName = "Afisare extras de cont client";
                         System.out.println("Introduceti id-ul clientului: ");
                         idClient = Integer.parseInt(in.nextLine());
                         service.getCustomerAmount(idClient);
                         break;
                     case 12:
+                        commandName = "Inchidere cont client";
                         System.out.println("Introduceti id-ul clientului: ");
                         idClient = Integer.parseInt(in.nextLine());
                         System.out.println("Introduceti IBAN-ul contului: ");
@@ -120,12 +149,16 @@ public class Main {
                         end = true;
                         break;
                 }
-                if(availableCommands.contains(command))
-                    auditService.logAction(Integer.toString(command));
+                if(availableCommands.contains(command)){
+                    auditService.logAction(commandName);
+                }
+
             }catch (Exception e){
                 System.out.println(e.toString());
             }
 
         }
+
+
     }
 }

@@ -245,7 +245,6 @@ public class Service {
                         foundAccount = 1;
                         List<Transaction> transactions = account.getTransactions();
                         Comparator<Transaction> amountSorter = Comparator.comparingDouble((Transaction o) -> o.getAmount());
-
                         Collections.sort(transactions, amountSorter);
                         for(int j=0; j < account.getTransactions().size(); j++){
                             transactions.get(j).out();
@@ -327,5 +326,70 @@ public class Service {
         }
     }
 
+    public void setClients(List<Client> clientsFromCSV){
+        for(int i=0; i<clientsFromCSV.size();i++){
+            clients.add(clientsFromCSV.get(i));
+        }
+    }
+
+    public void setAccounts(List<Account> accountsFromCSV){
+        for(int i=0; i<accountsFromCSV.size();i++){
+            for(int j=0; j<clients.size();j++){
+                String clientName = clients.get(j).getLastName() + clients.get(j).getFirstName();
+                if( clientName.equals(accountsFromCSV.get(i).getName())) {
+                    Account newAccount = accountsFromCSV.get(i);
+                    clients.get(j).addAccountCSV(newAccount.getIBAN(), newAccount.getSwift(), newAccount.getAmount(), newAccount.getName());
+                    break;
+                }
+            }
+        }
+    }
+
+    public void setSavingsAccounts(List<SavingsAccount> savingsAccountsFromCSV){
+        for(int i=0; i<savingsAccountsFromCSV.size();i++){
+            for(int j=0; j<clients.size();j++){
+                String clientName = clients.get(j).getLastName() +  clients.get(j).getFirstName();
+                if( clientName.equals(savingsAccountsFromCSV.get(i).getName())) {
+                    SavingsAccount newAccount = savingsAccountsFromCSV.get(i);
+                    clients.get(j).addSavingsAccountCSV(newAccount.getIBAN(), newAccount.getSwift(), newAccount.getAmount(), newAccount.getName(), newAccount.getStartDate(), newAccount.getEndDate());
+                    break;
+                }
+            }
+        }
+    }
+
+    public void setDeposits(List<Deposit> depositsFromCSV){
+        for(int i=0; i<depositsFromCSV.size();i++){
+            for(int j=0; j<clients.size();j++){
+                String clientName = clients.get(j).getLastName() + clients.get(j).getFirstName();
+                if( clientName.equals(depositsFromCSV.get(i).getName())) {
+                    Deposit newAccount = depositsFromCSV.get(i);
+                    clients.get(j).addDepositCSV(newAccount.getIBAN(), newAccount.getSwift(), newAccount.getAmount(), newAccount.getName(), newAccount.getStartDate(), newAccount.getEndDate(), newAccount.getInterestRate());
+                    break;
+                }
+            }
+        }
+    }
+
+    public void setTransactions(List<Transaction> transactionsFromCSV){
+        for(int i=0; i<transactionsFromCSV.size();i++){
+            for(int j=0; j < clients.size(); j++){
+                int foundAccount = 0;
+                Iterator<Account> it = clients.get(j).getAccounts().iterator();
+                while(it.hasNext()) {
+                    Account account = it.next();
+                    if(account.getIBAN().equals(transactionsFromCSV.get(i).getFromAccount())){
+                        foundAccount = 1;
+                        Transaction newTransaction = transactionsFromCSV.get(i);
+                        account.addTransactionCSV(newTransaction.getType(), newTransaction.getFromAccount(), newTransaction.getBeneficiary(), newTransaction.getAmount(), newTransaction.getDetails(), newTransaction.getCreationDate());
+                        break;
+                    }
+                }
+                if(foundAccount == 1){
+                    break;
+                }
+            }
+        }
+    }
 
 }

@@ -60,7 +60,7 @@ public class TransactionSingleton {
                         fields[2],
                         Double.parseDouble(fields[3]),
                         fields[4],
-                        new SimpleDateFormat("yyyy-MM-dd+HH:mm:ss").parse(fields[5])
+                        new SimpleDateFormat("yyyy-MM-dd").parse(fields[5])
                 );
                 transactions.add(newTransaction);
             }

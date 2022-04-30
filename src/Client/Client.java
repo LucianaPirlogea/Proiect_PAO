@@ -67,6 +67,11 @@ public class Client {
         return newAccount.getIBAN();
     }
 
+    public void addAccountCSV(String IBAN, String swift, double amount, String name){
+        Account newAccount = new Account(IBAN, swift, amount, name);
+        accounts.add(newAccount);
+    }
+
     public void closeAccount(Account deleteAccount){
         accounts.remove(deleteAccount);
     }
@@ -78,10 +83,20 @@ public class Client {
         return newSavingsAccount.getIBAN();
     }
 
+    public void addSavingsAccountCSV(String IBAN, String swift, double amount, String name, Date startDate, Date endDate){
+        SavingsAccount newSavingAccount = new SavingsAccount(IBAN, swift, amount, name, startDate, endDate);
+        accounts.add(newSavingAccount);
+    }
+
     public String addDeposit(String name){
         Account newDeposit = new Deposit(name);
         accounts.add(newDeposit);
         return newDeposit.getIBAN();
+    }
+
+    public void addDepositCSV(String IBAN, String swift, double amount, String name, Date startDate, Date endDate, double interestRate){
+        Account newDeposit = new Deposit(IBAN, swift, amount, name, startDate, endDate, interestRate);
+        accounts.add(newDeposit);
     }
 
     public String toCSV(){

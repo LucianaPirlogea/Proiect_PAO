@@ -70,6 +70,10 @@ public class Account {
         transactions.add(newTransaction);
     }
 
+    public void addTransactionCSV(String type, String fromAccount, String beneficiary, double amount, String details, Date creationDate){
+        Transaction newTransaction = new Transaction(type, fromAccount, beneficiary, amount, details, creationDate);
+        transactions.add(newTransaction);
+    }
 
     private String generateIBAN(){
         String generatedIBAN = "RO";
