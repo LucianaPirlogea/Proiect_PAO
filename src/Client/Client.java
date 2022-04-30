@@ -100,8 +100,7 @@ public class Client {
     }
 
     public String toCSV(){
-        return clientId +
-                "," + firstName +
+        return  firstName +
                 "," + lastName +
                 "," + CNP +
                 "," + (new SimpleDateFormat("yyyy-MM-dd")).format(birthDate) +

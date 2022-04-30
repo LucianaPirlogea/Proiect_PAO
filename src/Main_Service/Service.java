@@ -326,6 +326,67 @@ public class Service {
         }
     }
 
+    public List<Client> getClients(){
+        return clients;
+    }
+
+    public List<Account> getAccounts(){
+        List<Account> accounts = new ArrayList<>();
+        for(int i=0; i<clients.size();i++){
+            Iterator<Account> it = clients.get(i).getAccounts().iterator();
+            while(it.hasNext()) {
+                Account account = it.next();
+                if(account.getClass() == Account.class){
+                    accounts.add(account);
+                }
+            }
+        }
+        return accounts;
+    }
+
+    public List<SavingsAccount> getSavingsAccounts(){
+        List<SavingsAccount> savingsAccounts = new ArrayList<>();
+        for(int i=0; i<clients.size();i++){
+            Iterator<Account> it = clients.get(i).getAccounts().iterator();
+            while(it.hasNext()) {
+                Account savingsAccount = it.next();
+                if(savingsAccount.getClass() == SavingsAccount.class){
+                    savingsAccounts.add((SavingsAccount) savingsAccount);
+                }
+            }
+        }
+        return savingsAccounts;
+    }
+
+    public List<Deposit> getDeposits(){
+        List<Deposit> deposits = new ArrayList<>();
+        for(int i=0; i<clients.size();i++){
+            Iterator<Account> it = clients.get(i).getAccounts().iterator();
+            while(it.hasNext()) {
+                Account deposit = it.next();
+                if(deposit.getClass() == Deposit.class){
+                    deposits.add((Deposit) deposit);
+                }
+            }
+        }
+        return deposits;
+    }
+
+    public List<Transaction> getTransactions(){
+        List<Transaction> transactions = new ArrayList<>();
+        for(int i=0; i<clients.size();i++){
+            Iterator<Account> it = clients.get(i).getAccounts().iterator();
+            while(it.hasNext()) {
+                Account account = it.next();
+                List<Transaction> transactionsClient = account.getTransactions();
+                for(int j=0; j<transactionsClient.size();j++){
+                    transactions.add(transactionsClient.get(j));
+                }
+            }
+        }
+        return transactions;
+    }
+
     public void setClients(List<Client> clientsFromCSV){
         for(int i=0; i<clientsFromCSV.size();i++){
             clients.add(clientsFromCSV.get(i));

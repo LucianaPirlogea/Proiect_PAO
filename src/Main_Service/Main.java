@@ -159,6 +159,17 @@ public class Main {
 
         }
 
+        ClientSingleton.getInstance().setCustomers(service.getClients());
+        AccountSingleton.getInstance().setAccounts(service.getAccounts());
+        SavingsAccountSingleton.getInstance().setSavingsAccounts(service.getSavingsAccounts());
+        DepositSingleton.getInstance().setDeposits(service.getDeposits());
+        TransactionSingleton.getInstance().setTransactions(service.getTransactions());
+
+        ClientSingleton.getInstance().dumpToCSV();
+        AccountSingleton.getInstance().dumpToCSV();
+        SavingsAccountSingleton.getInstance().dumpToCSV();
+        DepositSingleton.getInstance().dumpToCSV();
+        TransactionSingleton.getInstance().dumpToCSV();
 
     }
 }
