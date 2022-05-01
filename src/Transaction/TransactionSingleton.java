@@ -44,7 +44,7 @@ public class TransactionSingleton {
                 columns.add(fields);
             }
         } catch (IOException e) {
-            System.out.println("No saved transactions!");
+            System.out.println("Nicio tranzactie salvata!");
         }
 
         return columns;
@@ -65,9 +65,9 @@ public class TransactionSingleton {
                 transactions.add(newTransaction);
             }
         }catch (ParseException e){
-            System.out.println("Cannot load transactions! - parse exception");
+            System.out.println("Nu se pot incarca tranzactiile! - parse exception");
         } catch (Exception e) {
-            System.out.println("Cannot parse transaction - invalid format");
+            System.out.println("Nu se pot parsa tranzactiile! - invalid format");
         }
 
 

@@ -42,7 +42,7 @@ public class AccountSingleton {
                 columns.add(fields);
             }
         } catch (IOException e) {
-            System.out.println("No saved accounts!");
+            System.out.println("Niciun cont salvat!");
         }
 
         return columns;

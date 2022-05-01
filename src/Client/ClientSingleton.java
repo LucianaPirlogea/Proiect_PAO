@@ -43,7 +43,7 @@ public class ClientSingleton {
                 columns.add(fields);
             }
         } catch (IOException e) {
-            System.out.println("No saved clients!");
+            System.out.println("Niciun client salvat!");
         }
 
         return columns;

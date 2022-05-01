@@ -44,7 +44,7 @@ public class SavingsAccountSingleton {
                 columns.add(fields);
             }
         } catch (IOException e) {
-            System.out.println("No saved savings accounts!");
+            System.out.println("Niciun cont de economii salvat!");
         }
 
         return columns;
@@ -65,7 +65,7 @@ public class SavingsAccountSingleton {
                 savingsAccounts.add(newAccount);
             }
         }catch (ParseException e){
-            System.out.println("Cannot load savings accounts!");
+            System.out.println("Nu se pot incarca conturile de economii!");
         }
 
 

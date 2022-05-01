@@ -1,4 +1,4 @@
-package Main_Service;
+package MainServices;
 
 import Card.Card;
 import Client.*;

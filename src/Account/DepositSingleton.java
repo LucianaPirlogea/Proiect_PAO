@@ -44,7 +44,7 @@ public class DepositSingleton {
                 columns.add(fields);
             }
         } catch (IOException e) {
-            System.out.println("No saved deposits!");
+            System.out.println("Niciun depozit salvat!");
         }
 
         return columns;
@@ -66,7 +66,7 @@ public class DepositSingleton {
                 deposits.add(newDeposit);
             }
         }catch (ParseException e){
-            System.out.println("Cannot load deposits!");
+            System.out.println("Nu se pot incarca depozitele!");
         }
 
 

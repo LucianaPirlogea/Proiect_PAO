@@ -1,4 +1,4 @@
-package Main_Service;
+package MainServices;
 
 import java.io.FileWriter;
 import java.io.IOException;
