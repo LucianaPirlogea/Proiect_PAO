@@ -2,12 +2,14 @@ package Client;
 
 import Account.*;
 
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.text.*;
 import java.util.*;
 
 public class Client {
-    private static int indexId = 0;
-    private final int clientId;
+    private static int indexId = 1;
+    private int clientId;
     private String firstName, lastName;
     private String CNP;
     private Date birthDate;
@@ -30,6 +32,17 @@ public class Client {
     public Client(Scanner in) throws ParseException {
         this.clientId = indexId++;
         read(in);
+    }
+
+    public Client(ResultSet in) throws SQLException{
+        this.clientId = in.getInt("clientId");
+        this.firstName = in.getString("firstName");
+        this.lastName = in.getString("lastName");
+        this.CNP = in.getString("CNP");
+        this.birthDate = in.getDate("birthDate");
+        this.email = in.getString("email");
+        this.phone = in.getString("phone");
+        this.address = new Address(in);
     }
 
     public void read(Scanner in) throws ParseException {
@@ -61,10 +74,10 @@ public class Client {
         this.address.out();
     }
 
-    public String addAccount(String name){
+    public Account addAccount(String name){
         Account newAccount = new Account(name);
         accounts.add(newAccount);
-        return newAccount.getIBAN();
+        return newAccount;
     }
 
     public void addAccountCSV(String IBAN, String swift, double amount, String name){
@@ -77,10 +90,10 @@ public class Client {
     }
 
 
-    public String addSavingsAccount(String name){
-        Account newSavingsAccount = new SavingsAccount(name);
+    public SavingsAccount addSavingsAccount(String name){
+        SavingsAccount newSavingsAccount = new SavingsAccount(name);
         accounts.add(newSavingsAccount);
-        return newSavingsAccount.getIBAN();
+        return newSavingsAccount;
     }
 
     public void addSavingsAccountCSV(String IBAN, String swift, double amount, String name, Date startDate, Date endDate){
@@ -88,10 +101,10 @@ public class Client {
         accounts.add(newSavingAccount);
     }
 
-    public String addDeposit(String name){
-        Account newDeposit = new Deposit(name);
+    public Deposit addDeposit(String name){
+        Deposit newDeposit = new Deposit(name);
         accounts.add(newDeposit);
-        return newDeposit.getIBAN();
+        return newDeposit;
     }
 
     public void addDepositCSV(String IBAN, String swift, double amount, String name, Date startDate, Date endDate, double interestRate){
@@ -166,6 +179,10 @@ public class Client {
     }
 
     public int getClientId(){ return clientId;}
+
+    public void setClientId(int clientId) {
+        this.clientId = clientId;
+    }
 
     public Set<Account> getAccounts() {
         return accounts;

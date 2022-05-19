@@ -1,5 +1,7 @@
 package Account;
 
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
@@ -14,6 +16,11 @@ public class Deposit extends SavingsAccount{
     public Deposit(String IBAN, String swift, double amount, String name, Date startDate, Date endDate, double interestRate) {
         super(IBAN, swift, amount, name, startDate, endDate);
         this.interestRate = interestRate;
+    }
+
+    public Deposit(ResultSet in) throws SQLException {
+        super(in);
+        this.interestRate = in.getDouble("interestRate");
     }
 
     public double getInterestRate() {

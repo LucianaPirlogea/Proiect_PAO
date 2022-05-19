@@ -22,11 +22,11 @@ public class ClientSingleton {
         return instance;
     }
 
-    public void setCustomers(List<Client> clients) {
+    public void setClients(List<Client> clients) {
         this.clients = clients;
     }
 
-    public List<Client> getCustomers() {
+    public List<Client> getClients() {
         return clients;
     }
 

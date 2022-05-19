@@ -4,6 +4,8 @@ import Card.*;
 import Client.Client;
 import Transaction.Transaction;
 
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.text.ParseException;
 import java.util.*;
 
@@ -30,6 +32,14 @@ public class Account {
         this.amount = 0;
         this.name = name;
     }
+
+    public Account(ResultSet in) throws SQLException {
+        this.IBAN = in.getString("IBAN");
+        this.swift = in.getString("swift");
+        this.amount = in.getDouble("amount");
+        this.name = in.getString("name");
+    }
+
 
     public void out(){
         System.out.println("Account Details:");
@@ -65,9 +75,10 @@ public class Account {
         authorizedPeople.add(newAuthorized);
     }
 
-    public void addTransaction(Scanner in, String fromAccount, double amount) throws ParseException {
+    public Transaction addTransaction(Scanner in, String fromAccount, double amount) throws ParseException {
         Transaction newTransaction = new Transaction(in, fromAccount, amount);
         transactions.add(newTransaction);
+        return newTransaction;
     }
 
     public void addTransactionCSV(String type, String fromAccount, String beneficiary, double amount, String details, Date creationDate){

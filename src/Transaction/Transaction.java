@@ -1,5 +1,7 @@
 package Transaction;
 
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
@@ -28,6 +30,15 @@ public class Transaction {
         this.creationDate = new Date();
     }
 
+    public Transaction(ResultSet in) throws SQLException {
+        this.type = in.getString("type");
+        this.fromAccount = in.getString("fromAccount");
+        this.beneficiary = in.getString("beneficiary");
+        this.amount = in.getDouble("amount");
+        this.details = in.getString("details");
+        this.creationDate = in.getDate("creationDate");
+    }
+
     public void read(Scanner in) throws ParseException {
         System.out.println("Type(intrabanking/interbanking): ");
         this.type = in.nextLine();
@@ -54,7 +65,7 @@ public class Transaction {
                 "," + beneficiary +
                 "," + amount +
                 "," + details +
-                "," + (new SimpleDateFormat("yyyy-MM-dd h:m:s")).format(creationDate);
+                "," + (new SimpleDateFormat("yyyy-MM-dd")).format(creationDate);
     }
 
     public String getType(){

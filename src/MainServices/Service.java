@@ -9,7 +9,34 @@ import java.text.ParseException;
 import java.util.*;
 
 public class Service {
+
     private List<Client> clients = new ArrayList<>();
+
+    private ClientDatabase clientDatabase = null;
+    private TransactionDatabase transactionDatabase = null;
+    private AccountDatabase accountDatabase = null;
+    private SavingsAccountDatabase savingsAccountDatabase = null;
+    private DepositDatabase depositDatabase = null;
+
+    public Service(ClientDatabase clientDatabase, TransactionDatabase transactionDatabase, AccountDatabase accountDatabase, SavingsAccountDatabase savingsAccountDatabase, DepositDatabase depositDatabase) {
+        this.clientDatabase = clientDatabase;
+        this.transactionDatabase = transactionDatabase;
+        this.accountDatabase = accountDatabase;
+        this.savingsAccountDatabase = savingsAccountDatabase;
+        this.depositDatabase = depositDatabase;
+
+
+        this.setClients(clientDatabase.read());
+        this.setTransactions(transactionDatabase.read());
+        this.setAccounts(accountDatabase.read());
+        this.setSavingsAccounts(savingsAccountDatabase.read());
+        this.setDeposits(depositDatabase.read());
+
+    }
+
+    public Service(){ }
+
+
 
     public void createClient(Scanner in) throws ParseException {
         System.out.println("Introduceti datele:");
@@ -19,15 +46,22 @@ public class Service {
             if (clients.get(i).getCNP().equals(newClient.getCNP())) {
                 existingClient = 1;
             }
+            else{
+                if(clients.get(i).getClientId() == newClient.getClientId())
+                    newClient.setClientId(clients.size()+1);
+            }
         }
         if(existingClient == 1){
             System.out.println("Clientul deja exista!");
         }
         else{
             clients.add(newClient);
+            if(this.clientDatabase!=null)
+                this.clientDatabase.create(newClient);
             System.out.println("Clientul a fost adaugat cu succes!");
             System.out.println("Id Client: " + newClient.getClientId());
         }
+
     }
 
     public void createAccountForClient(int idClient){
@@ -43,18 +77,24 @@ public class Service {
                 foundClient = 1;
                 if (optiune == 1){
                     System.out.println("Contul curent a fost adaugat cu succes!");
-                    String IBAN = clients.get(i).addAccount(clients.get(i).getLastName() + " " + clients.get(i).getFirstName());
-                    System.out.println("IBAN: " + IBAN);
+                    Account newAccount = clients.get(i).addAccount(clients.get(i).getLastName() + clients.get(i).getFirstName());
+                    System.out.println("IBAN: " + newAccount.getIBAN());
+                    if(this.accountDatabase!=null)
+                        this.accountDatabase.create(newAccount);
                 }
                 if (optiune == 2){
                     System.out.println("Contul de economii a fost adaugat cu succes!");
-                    String IBAN = clients.get(i).addSavingsAccount(clients.get(i).getLastName() + " " +clients.get(i).getFirstName());
-                    System.out.println("IBAN: " + IBAN);
+                    SavingsAccount  newSavingsAccount = clients.get(i).addSavingsAccount(clients.get(i).getLastName() + clients.get(i).getFirstName());
+                    System.out.println("IBAN: " + newSavingsAccount.getIBAN());
+                    if(this.savingsAccountDatabase!=null)
+                        this.savingsAccountDatabase.create(newSavingsAccount);
                 }
                 if (optiune == 3){
                     System.out.println("Depozitul a fost adaugat cu succes!");
-                    String IBAN = clients.get(i).addDeposit(clients.get(i).getLastName() + " " +clients.get(i).getFirstName());
-                    System.out.println("IBAN: " + IBAN);
+                    Deposit deposit = clients.get(i).addDeposit(clients.get(i).getLastName() + clients.get(i).getFirstName());
+                    System.out.println("IBAN: " + deposit.getIBAN());
+                    if(this.depositDatabase!=null)
+                        this.depositDatabase.create(deposit);
                 }
             }
         }
@@ -108,6 +148,7 @@ public class Service {
 
     public void addTransactiontoAccount(int idClient, String IBAN, double amount) throws ParseException {
         int foundAccount = 0;
+
         for(int i=0; i<clients.size();i++){
             if(clients.get(i).getClientId() == idClient){
                 Iterator<Account> it = clients.get(i).getAccounts().iterator();
@@ -118,7 +159,27 @@ public class Service {
                         if(amount < account.getAmount()){
                             Scanner in = new Scanner(System.in);
                             account.setAmount(account.getAmount() - amount);
-                            account.addTransaction(in, IBAN, amount);
+                            Transaction newTransaction = account.addTransaction(in, IBAN, amount);
+                            if(this.transactionDatabase!=null)
+                                this.transactionDatabase.create(newTransaction);
+                            if(this.accountDatabase!=null)
+                                this.accountDatabase.update(account);
+                            int gasitBeneficiar = 0;
+                            for(int j=0; j<clients.size();j++){
+                                Iterator<Account> itBeneficiary = clients.get(j).getAccounts().iterator();
+                                while(itBeneficiary.hasNext()) {
+                                    Account accountBeneficiary = itBeneficiary.next();
+                                    if (accountBeneficiary.getIBAN().equals(newTransaction.getBeneficiary())) {
+                                        accountBeneficiary.setAmount(accountBeneficiary.getAmount() + amount);
+                                        if (this.accountDatabase != null)
+                                            this.accountDatabase.update(accountBeneficiary);
+                                        gasitBeneficiar = 1;
+                                        break;
+                                    }
+                                }
+                                if(gasitBeneficiar == 1)
+                                    break;
+                            }
                             System.out.println("Tranzactia a fost facuta cu succes!");
                         }
                         else{
@@ -131,7 +192,7 @@ public class Service {
 
             }
         }
-        if(foundAccount == 0){
+        if(foundAccount == 0) {
             System.out.println("Tranzactia nu a fost facuta! Adaugati un cont curent!");
         }
 
@@ -166,12 +227,20 @@ public class Service {
         int foundAccount = 0;
         for(int i=0; i<clients.size();i++){
             if(clients.get(i).getClientId() == idClient){
+                System.out.println("Client gasit");
                 Iterator<Account> it = clients.get(i).getAccounts().iterator();
                 while(it.hasNext()) {
                     Account account = it.next();
+                    System.out.println(account.getIBAN());
                     if(account.getIBAN().equals(IBAN)){
                         foundAccount = 1;
                         account.setAmount(account.getAmount() + amount);
+                        if(this.accountDatabase!=null && account.getClass() == Account.class)
+                            this.accountDatabase.update(account);
+                        if(this.savingsAccountDatabase!=null && account.getClass() == SavingsAccount.class)
+                            this.savingsAccountDatabase.update((SavingsAccount) account);
+                        if(this.depositDatabase!=null && account.getClass() == Deposit.class)
+                            this.depositDatabase.update((Deposit) account);
                         System.out.println("Contul a fost incarcat cu succes!");
                         break;
                     }
@@ -194,6 +263,12 @@ public class Service {
                     if(account.getIBAN().equals(IBAN)){
                         foundAccount = 1;
                         clients.get(i).closeAccount(account);
+                        if(this.accountDatabase!=null && account.getClass() == Account.class)
+                            this.accountDatabase.delete(account);
+                        if(this.savingsAccountDatabase!=null && account.getClass() == SavingsAccount.class)
+                            this.savingsAccountDatabase.delete((SavingsAccount) account);
+                        if(this.depositDatabase!=null && account.getClass() == Deposit.class)
+                            this.depositDatabase.delete((Deposit) account);
                         System.out.println("Contul a fost inchis cu succes!");
                         break;
                     }
@@ -208,7 +283,7 @@ public class Service {
 
     }
 
-    public void getCustomerAmount(int idClient){
+    public void getClientAmount(int idClient){
         int foundClient = 0;
         for(int i=0; i<clients.size();i++){
             if(clients.get(i).getClientId() == idClient){
@@ -387,18 +462,18 @@ public class Service {
         return transactions;
     }
 
-    public void setClients(List<Client> clientsFromCSV){
-        for(int i=0; i<clientsFromCSV.size();i++){
-            clients.add(clientsFromCSV.get(i));
+    public void setClients(List<Client> clientsLoaded){
+        for(int i=0; i<clientsLoaded.size();i++){
+            clients.add(clientsLoaded.get(i));
         }
     }
 
-    public void setAccounts(List<Account> accountsFromCSV){
-        for(int i=0; i<accountsFromCSV.size();i++){
+    public void setAccounts(List<Account> accountsLoaded){
+        for(int i=0; i<accountsLoaded.size();i++){
             for(int j=0; j<clients.size();j++){
                 String clientName = clients.get(j).getLastName() + clients.get(j).getFirstName();
-                if( clientName.equals(accountsFromCSV.get(i).getName())) {
-                    Account newAccount = accountsFromCSV.get(i);
+                if( clientName.equals(accountsLoaded.get(i).getName())) {
+                    Account newAccount = accountsLoaded.get(i);
                     clients.get(j).addAccountCSV(newAccount.getIBAN(), newAccount.getSwift(), newAccount.getAmount(), newAccount.getName());
                     break;
                 }
@@ -406,12 +481,12 @@ public class Service {
         }
     }
 
-    public void setSavingsAccounts(List<SavingsAccount> savingsAccountsFromCSV){
-        for(int i=0; i<savingsAccountsFromCSV.size();i++){
+    public void setSavingsAccounts(List<SavingsAccount> savingsAccountsLoaded){
+        for(int i=0; i<savingsAccountsLoaded.size();i++){
             for(int j=0; j<clients.size();j++){
                 String clientName = clients.get(j).getLastName() +  clients.get(j).getFirstName();
-                if( clientName.equals(savingsAccountsFromCSV.get(i).getName())) {
-                    SavingsAccount newAccount = savingsAccountsFromCSV.get(i);
+                if( clientName.equals(savingsAccountsLoaded.get(i).getName())) {
+                    SavingsAccount newAccount = savingsAccountsLoaded.get(i);
                     clients.get(j).addSavingsAccountCSV(newAccount.getIBAN(), newAccount.getSwift(), newAccount.getAmount(), newAccount.getName(), newAccount.getStartDate(), newAccount.getEndDate());
                     break;
                 }
@@ -419,12 +494,12 @@ public class Service {
         }
     }
 
-    public void setDeposits(List<Deposit> depositsFromCSV){
-        for(int i=0; i<depositsFromCSV.size();i++){
+    public void setDeposits(List<Deposit> depositsLoaded){
+        for(int i=0; i<depositsLoaded.size();i++){
             for(int j=0; j<clients.size();j++){
-                String clientName = clients.get(j).getLastName() + clients.get(j).getFirstName();
-                if( clientName.equals(depositsFromCSV.get(i).getName())) {
-                    Deposit newAccount = depositsFromCSV.get(i);
+                String clientName = clients.get(j).getLastName() +  clients.get(j).getFirstName();
+                if( clientName.equals(depositsLoaded.get(i).getName())) {
+                    Deposit newAccount = depositsLoaded.get(i);
                     clients.get(j).addDepositCSV(newAccount.getIBAN(), newAccount.getSwift(), newAccount.getAmount(), newAccount.getName(), newAccount.getStartDate(), newAccount.getEndDate(), newAccount.getInterestRate());
                     break;
                 }
@@ -432,16 +507,16 @@ public class Service {
         }
     }
 
-    public void setTransactions(List<Transaction> transactionsFromCSV){
-        for(int i=0; i<transactionsFromCSV.size();i++){
+    public void setTransactions(List<Transaction> transactionsLoaded){
+        for(int i=0; i<transactionsLoaded.size();i++){
             for(int j=0; j < clients.size(); j++){
                 int foundAccount = 0;
                 Iterator<Account> it = clients.get(j).getAccounts().iterator();
                 while(it.hasNext()) {
                     Account account = it.next();
-                    if(account.getIBAN().equals(transactionsFromCSV.get(i).getFromAccount())){
+                    if(account.getIBAN().equals(transactionsLoaded.get(i).getFromAccount())){
                         foundAccount = 1;
-                        Transaction newTransaction = transactionsFromCSV.get(i);
+                        Transaction newTransaction = transactionsLoaded.get(i);
                         account.addTransactionCSV(newTransaction.getType(), newTransaction.getFromAccount(), newTransaction.getBeneficiary(), newTransaction.getAmount(), newTransaction.getDetails(), newTransaction.getCreationDate());
                         break;
                     }
