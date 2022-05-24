@@ -227,11 +227,9 @@ public class Service {
         int foundAccount = 0;
         for(int i=0; i<clients.size();i++){
             if(clients.get(i).getClientId() == idClient){
-                System.out.println("Client gasit");
                 Iterator<Account> it = clients.get(i).getAccounts().iterator();
                 while(it.hasNext()) {
                     Account account = it.next();
-                    System.out.println(account.getIBAN());
                     if(account.getIBAN().equals(IBAN)){
                         foundAccount = 1;
                         account.setAmount(account.getAmount() + amount);
