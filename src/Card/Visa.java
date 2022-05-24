@@ -28,12 +28,7 @@ public class Visa extends Card{
     }
 
     public void out(){
-        System.out.println("Visa Card Details:");
-        System.out.println("Id: " + this.Id);
-        System.out.println("Name: " + this.name);
-        System.out.println("Number: " + this.number);
-        System.out.println("CVV: " + this.CVV);
-        System.out.println("Expiration Date: " + this.expirationDate);
+        super.out();
         System.out.println("Emergency Card Replacement: " + this.emergencyCardReplacement);
         System.out.println("Travel Accident Insurance: " + this.travelAccidentInsurance);
         System.out.println("\n");

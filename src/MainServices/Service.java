@@ -287,18 +287,19 @@ public class Service {
         int foundClient = 0;
         for(int i=0; i<clients.size();i++){
             if(clients.get(i).getClientId() == idClient){
+                System.out.println("Extras de cont " + clients.get(i).getLastName() + " " + clients.get(i).getFirstName());
                 Iterator<Account> it = clients.get(i).getAccounts().iterator();
                 foundClient = 1;
                 while(it.hasNext()) {
                     Account account = it.next();
                     if(account.getClass() == Account.class){
-                        System.out.println("Suma cont curent: " + account.getAmount());
+                        System.out.println("Suma cont curent " + account.getIBAN() +" : " + account.getAmount());
                     }
                     if(account.getClass() == SavingsAccount.class){
-                        System.out.println("Suma cont de economii: " + account.getAmount());
+                        System.out.println("Suma cont de economii " + account.getIBAN() +" : " + account.getAmount());
                     }
                     if(account.getClass() == Deposit.class){
-                        System.out.println("Suma depozit: " + account.getAmount());
+                        System.out.println("Suma depozit " + account.getIBAN() +" : " + account.getAmount());
                     }
                 }
                 break;

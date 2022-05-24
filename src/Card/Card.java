@@ -41,16 +41,15 @@ public class Card {
         System.out.println("Number: " + this.number);
         System.out.println("CVV: " + this.CVV);
         System.out.println("Expiration Date: " + this.expirationDate);
-        System.out.println("\n");
     }
 
     private String generateCardNumber(){
-        int[] array = new int[16];
+        StringBuilder number = new StringBuilder();
         Random rand = new Random();
-        for (int i = 0; i < array.length; i++) {
-           array[i] = rand.nextInt(10);
+        for (int i = 0; i < 16; i++) {
+           number.append(rand.nextInt(10));
         }
-        return Arrays.toString(array);
+        return number.toString();
     }
 
     private int generateCardCVV(){
